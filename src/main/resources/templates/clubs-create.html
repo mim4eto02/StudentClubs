@@ -1,0 +1,94 @@
+<html
+        xmlns:th="http://thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+  <title>Register</title>
+</head>
+<section layout:fragment="body">
+  <div class="container h-100">
+    <div class="row d-flex align-items-center justify-content-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px;">
+
+          <div class="card-body p-md-3">
+            <div class="row justify-content-center">
+              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Create club</p>
+
+                <form class="mx-1 mx-md-3" th:action="@{/clubs/new}" th:object="${club}" th:method="post">
+
+                  <div class="d-flex flex-row align-items-center mb-3">
+                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="title">Title</label>
+
+                      <input
+                              type="text"
+                              class="form-control"
+                              id="title"
+                              name="title"
+                              th:field="*{title}"
+                              placeholder="Club title">
+                      <p th:if="${#fields.hasErrors('title')}" class="text-danger" th:errors="*{title}">Title Error</p>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-3">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="photoUrl">Photo Url</label>
+
+                      <input
+                              type="text"
+                              class="form-control"
+                              id="photoUrl"
+                              name="photoUrl"
+                              th:field="*{photoUrl}"
+                              placeholder="Photo Url">
+                      <p th:if="${#fields.hasErrors('photoUrl')}" class="text-danger" th:errors="*{photoUrl}">Photo Url Error</p>
+                    </div>
+                  </div>
+
+
+
+                  <div class="d-flex flex-row align-items-center mb-2">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="content">Content</label>
+
+                      <textarea
+                              type="text"
+                              class="text-area form-control"
+                              id="content"
+                              name="content"
+                              th:field="*{content}"
+                              placeholder="Content"
+                              rows="4"> </textarea>
+                      <p th:if="${#fields.hasErrors('content')}" class="text-danger" th:errors="*{content}">Content Error</p>
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-center mb-3">
+                    <button type="submit" class="btn btn-primary m-lg-3">Create</button>
+                    <a th:href="@{/clubs}" id="cancel" name="cancel" class="btn btn-primary m-lg-3">Cancel</a>
+                  </div>
+
+                </form>
+
+              </div>
+              <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                <img th:src="@{/images/clubs.webp}"
+                     class="img-fluid" alt="Clubs-create">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</html>
