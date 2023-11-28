@@ -8,10 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
-    private final UserService userService;
+    public HomeController() {
 
-    public HomeController(UserService userService) {
-        this.userService = userService;
     }
 
     @GetMapping("/")
@@ -31,4 +29,10 @@ public class HomeController {
 
         return new ModelAndView("terms");
     }
+
+//    @GetMapping("/contact")
+//    public ModelAndView contact() {
+//
+//        return new ModelAndView("contact");
+//    }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 public interface EventService {
     void createEvent(Long clubId, EventDto eventDto);
 
-    List<EventDto> findAllEvents();
+    List<EventDto> findAllUpcomingEvents();
 
     EventDto findEventById(long eventId);
 
@@ -16,4 +16,6 @@ public interface EventService {
     void deleteEventById(long eventId);
 
     List<EventDto> searchByTitle(String query);
+
+    List<EventDto> findAllPastEvents();
 }

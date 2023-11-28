@@ -4,6 +4,7 @@ import com.softuni.StudentClubs.dto.EventDto;
 import com.softuni.StudentClubs.models.Event;
 import com.softuni.StudentClubs.models.UserEntity;
 import com.softuni.StudentClubs.security.SecurityUtil;
+import com.softuni.StudentClubs.service.ClubService;
 import com.softuni.StudentClubs.service.EventService;
 import com.softuni.StudentClubs.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ public class EventController {
 
     private final UserService userService;
 
+
     public EventController(EventService eventService, UserService userService) {
         this.eventService = eventService;
         this.userService = userService;
@@ -29,7 +31,7 @@ public class EventController {
     @GetMapping("/events")
     public String eventsList(Model model) {
         UserEntity user = new UserEntity();
-        List<EventDto> events = eventService.findAllEvents();
+        List<EventDto> events = eventService.findAllUpcomingEvents();
         String username = SecurityUtil.getSessionUser();
         if (username != null) {
             user = userService.findByUsername(username);
@@ -79,6 +81,20 @@ public class EventController {
     public String eventsSearch(@RequestParam(value = "query") String query, Model model) {
         UserEntity user = new UserEntity();
         List<EventDto> events = eventService.searchByTitle(query);
+        String username = SecurityUtil.getSessionUser();
+        if (username != null) {
+            user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("events", events);
+        return "events-list";
+    }
+
+    @GetMapping("/events/past")
+    public String pastEvents(Model model) {
+        UserEntity user = new UserEntity();
+        List<EventDto> events = eventService.findAllPastEvents();
         String username = SecurityUtil.getSessionUser();
         if (username != null) {
             user = userService.findByUsername(username);

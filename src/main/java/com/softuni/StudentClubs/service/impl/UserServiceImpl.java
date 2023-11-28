@@ -4,7 +4,6 @@ import com.softuni.StudentClubs.dto.RegistrationDto;
 import com.softuni.StudentClubs.dto.RoleDto;
 import com.softuni.StudentClubs.dto.UserEditDto;
 import com.softuni.StudentClubs.dto.UserViewDto;
-import com.softuni.StudentClubs.exception.UserNotFoundException;
 import com.softuni.StudentClubs.models.Role;
 import com.softuni.StudentClubs.models.UserEntity;
 import com.softuni.StudentClubs.repository.RoleRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,12 +22,15 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    private final EmailServiceImpl emailService;
+
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, EmailServiceImpl emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Override
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setRoles(Arrays.asList(role));
         userEntity.setActive(true);
         userRepository.save(userEntity);
+        this.emailService.sendRegistrationEmail(registrationDto.getEmail(), registrationDto.getUsername());
     }
 
     @Override

@@ -28,8 +28,10 @@ public class Event {
 
     private String type;
 
+    @Column(columnDefinition="TEXT", length = 2000)
     private String photoUrl;
 
+    @Column(columnDefinition="TEXT", length = 2000)
     private String description;
 
     @CreationTimestamp

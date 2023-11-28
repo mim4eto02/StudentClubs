@@ -10,4 +10,10 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e WHERE lower(e.name) LIKE lower(CONCAT('%',:query,'%'))")
     List<Event> searchByTitle(String query);
+
+    @Query("SELECT e FROM Event e WHERE e.endTime < CURRENT_TIMESTAMP")
+    List<Event> findAllPastEvents();
+
+    @Query("SELECT e FROM Event e WHERE e.endTime > CURRENT_TIMESTAMP")
+    List<Event> findAllUpcomingEvents();
 }

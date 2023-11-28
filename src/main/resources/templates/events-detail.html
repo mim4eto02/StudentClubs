@@ -18,7 +18,12 @@
         <div class="col-md-6" >
             <div class="small mb-1 mt-2"><b> Start time: </b>[[${event.startTime}]]</div>
             <div class="small mb-1 "><b> End time: </b>[[${event.endTime}]]</div>
+
+
             <h1 class="display-5 fw-bolder" th:text="${event.name}"></h1>
+
+            <div class="small mb-1 "><b> Club: </b>[[${event.club.title}]]</div>
+
             <p class="lead" th:text="${event.description}"></p>
             <div class="d-flex mb-3" >
                 <div th:if="${user.id} != ${event.club.createdBy.id}">

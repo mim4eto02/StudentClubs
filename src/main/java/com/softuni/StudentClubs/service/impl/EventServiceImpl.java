@@ -35,8 +35,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDto> findAllEvents() {
-        List<Event> events = eventRepository.findAll();
+    public List<EventDto> findAllUpcomingEvents() {
+        List<Event> events = eventRepository.findAllUpcomingEvents();
         return events.stream().map(EventMapper::mapToEventDto).collect(Collectors.toList());
     }
 
@@ -60,6 +60,12 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventDto> searchByTitle(String query) {
         List<Event> events = eventRepository.searchByTitle(query);
+        return events.stream().map(EventMapper::mapToEventDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EventDto> findAllPastEvents() {
+        List<Event> events = eventRepository.findAllPastEvents();
         return events.stream().map(EventMapper::mapToEventDto).collect(Collectors.toList());
     }
 
