@@ -2,8 +2,8 @@ package com.softuni.StudentClubs.service.impl;
 
 import com.softuni.StudentClubs.dto.EventDto;
 import com.softuni.StudentClubs.mapper.EventMapper;
-import com.softuni.StudentClubs.models.Club;
-import com.softuni.StudentClubs.models.Event;
+import com.softuni.StudentClubs.models.entities.Club;
+import com.softuni.StudentClubs.models.entities.Event;
 import com.softuni.StudentClubs.repository.ClubRepository;
 import com.softuni.StudentClubs.repository.EventRepository;
 import com.softuni.StudentClubs.service.EventService;
@@ -68,6 +68,8 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventRepository.findAllPastEvents();
         return events.stream().map(EventMapper::mapToEventDto).collect(Collectors.toList());
     }
+
+
 
 
 }

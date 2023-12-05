@@ -1,7 +1,7 @@
 package com.softuni.StudentClubs.mapper;
 
 import com.softuni.StudentClubs.dto.EventDto;
-import com.softuni.StudentClubs.models.Event;
+import com.softuni.StudentClubs.models.entities.Event;
 
 public class EventMapper {
     public static Event mapToEvent(EventDto eventDto) {
@@ -13,6 +13,7 @@ public class EventMapper {
                 .type(eventDto.getType())
                 .photoUrl(eventDto.getPhotoUrl())
                 .description(eventDto.getDescription())
+                .location(eventDto.getLocation())
                 .createdOn(eventDto.getCreatedOn())
                 .updatedOn(eventDto.getUpdatedOn())
                 .club(eventDto.getClub())
@@ -29,6 +30,7 @@ public class EventMapper {
                 .type(event.getType())
                 .photoUrl(event.getPhotoUrl())
                 .description(event.getDescription())
+                .location(event.getLocation())
                 .createdOn(event.getCreatedOn())
                 .updatedOn(event.getUpdatedOn())
                 .club(event.getClub())

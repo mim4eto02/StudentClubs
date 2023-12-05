@@ -4,15 +4,15 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @Data
 @Builder
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContactDto {
 
+    private Long id;
     @NotBlank(message = "Name must not be empty!")
    private String name;
 
@@ -25,6 +25,9 @@ public class ContactDto {
 
     @NotBlank(message = "Message must not be empty!")
    private String message;
+
+    private LocalDate createdOn;
+
 
 
 }

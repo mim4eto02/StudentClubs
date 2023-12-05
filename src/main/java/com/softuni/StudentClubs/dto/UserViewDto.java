@@ -1,14 +1,16 @@
 package com.softuni.StudentClubs.dto;
 
+import com.softuni.StudentClubs.models.entities.Role;
 import lombok.*;
 
 import java.util.List;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserViewDto {
 
     private Long id;
@@ -17,7 +19,7 @@ public class UserViewDto {
 
     private String email;
 
-    private List<RoleDto> roles;
+    private List<Role> roles;
 
     private boolean isActive;
 }

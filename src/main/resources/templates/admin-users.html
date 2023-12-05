@@ -1,0 +1,86 @@
+<html
+        xmlns:th="http://thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <title>Register</title>
+</head>
+<section layout:fragment="body">
+
+    <div class="m-5 justify-content-start">
+
+        <table class="table align-items-center table-bordered border-4 table-striped">
+                                      <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Roles</th>
+                                            <th scope="col">Active</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="user : ${users}" scope="row">
+                                            <td  th:text="${user.id}"></td>
+                                            <td th:text="${user.username}"></td>
+                                            <td th:text="${user.email}"></td>
+                                            <td>
+                                                <ul>
+                                                    <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
+                                                </ul>
+                                            </td>
+                                            <td th:text="${user.active} ? 'Yes' : 'No'"></td>
+                                            <td>
+                                                <form th:action="@{/admin/user/{userId}(userId=${user.id})}" method="get">
+                                                    <button class="btn btn-primary m-lg-1 border-1" type="submit">View</button>
+                                                </form>
+                                                <form th:action="@{/admin/makeAdmin/{userId}(userId=${user.id})}" method="post" onsubmit="return confirmActionMakeAdmin()">
+                                                    <button class="btn btn-primary m-lg-1 border-1" type="submit">Make Admin</button>
+                                                </form>
+
+                                                <script>
+                                                    function confirmActionMakeAdmin() {
+                                                        var result = confirm("Are you sure you want to make this user an admin?");
+                                                        return result;  // Returning false will cancel the form submission if the user clicks "Cancel"
+                                                    }
+                                                </script>
+                                                <form th:action="@{/admin/removeAdmin/{userId}(userId=${user.id})}" method="post" onsubmit="return confirmActionRemoveAdmin()">
+                                                    <button class="btn btn-primary m-lg-1 border-1" type="submit">Remove Admin</button>
+                                                </form>
+                                                <script>
+                                                    function confirmActionRemoveAdmin() {
+                                                        var result = confirm("Are you sure you want to remove this user as admin?");
+                                                        return result;  // Returning false will cancel the form submission if the user clicks "Cancel"
+                                                    }
+                                                </script>
+                                                <form th:action="@{/admin/activateUser/{userId}(userId=${user.id})}" method="post" onsubmit="return confirmActionActivateUser()">
+                                                    <button class="btn btn-primary m-lg-1 border-1" type="submit">Activate</button>
+                                                </form>
+                                                <script>
+                                                    function confirmActionActivateUser() {
+                                                        var result = confirm("Are you sure you want to activate this user");
+                                                        return result;  // Returning false will cancel the form submission if the user clicks "Cancel"
+                                                    }
+                                                </script>
+                                                <form th:action="@{/admin/deactivateUser/{userId}(userId=${user.id})}" method="post" onsubmit="return confirmActionDeactivateUser()">
+                                                    <button class="btn btn-primary m-lg-1 border-1" type="submit">Deactivate</button>
+                                                </form>
+                                                <script>
+                                                    function confirmActionDeactivateUser() {
+                                                        var result = confirm("Are you sure you want to deactivate this user");
+                                                        return result;  // Returning false will cancel the form submission if the user clicks "Cancel"
+                                                    }
+                                                </script>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+
+
+    </div>
+
+</section>
+
+</html>

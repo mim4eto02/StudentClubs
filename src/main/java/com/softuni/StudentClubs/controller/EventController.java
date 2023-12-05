@@ -1,8 +1,9 @@
 package com.softuni.StudentClubs.controller;
 
+import com.softuni.StudentClubs.dto.ClubDto;
 import com.softuni.StudentClubs.dto.EventDto;
-import com.softuni.StudentClubs.models.Event;
-import com.softuni.StudentClubs.models.UserEntity;
+import com.softuni.StudentClubs.models.entities.Event;
+import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.security.SecurityUtil;
 import com.softuni.StudentClubs.service.ClubService;
 import com.softuni.StudentClubs.service.EventService;
@@ -22,10 +23,13 @@ public class EventController {
 
     private final UserService userService;
 
+    private final ClubService clubService;
 
-    public EventController(EventService eventService, UserService userService) {
+
+    public EventController(EventService eventService, UserService userService, ClubService clubService) {
         this.eventService = eventService;
         this.userService = userService;
+        this.clubService = clubService;
     }
 
     @GetMapping("/events")
@@ -103,15 +107,16 @@ public class EventController {
         model.addAttribute("user", user);
         model.addAttribute("events", events);
         return "events-list";
+
     }
 
     @PostMapping("/events/{clubId}")
-    public String createEvent(@PathVariable("clubId") Long clubId, @ModelAttribute("event") EventDto eventDto,
+    public String createEvent(@PathVariable("clubId") Long clubId, @Valid @ModelAttribute("event") EventDto eventDto,
                               BindingResult result,
                               Model model) {
         if(result.hasErrors()) {
             model.addAttribute("event", eventDto);
-            return "clubs-create";
+            return "events-create";
         }
         eventService.createEvent(clubId, eventDto);
         return "redirect:/clubs/" + clubId;

@@ -1,5 +1,6 @@
-package com.softuni.StudentClubs.models;
+package com.softuni.StudentClubs.models.entities;
 
+import com.softuni.StudentClubs.models.enums.EventTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,19 +21,27 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private LocalDateTime startTime;
 
+    @Column(nullable = false)
     private LocalDateTime endTime;
 
-    private String type;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EventTypeEnum type ;
 
-    @Column(columnDefinition="TEXT", length = 2000)
+    @Column(columnDefinition="TEXT", length = 2000, nullable = false)
     private String photoUrl;
 
-    @Column(columnDefinition="TEXT", length = 2000)
+    @Column(columnDefinition="TEXT", length = 2000, nullable = false)
     private String description;
+
+    @Column(columnDefinition="TEXT", length = 2000, nullable = true)
+    private String location;
 
     @CreationTimestamp
     private LocalDateTime createdOn;

@@ -1,7 +1,7 @@
 package com.softuni.StudentClubs.service;
 
 import com.softuni.StudentClubs.dto.ClubDto;
-import com.softuni.StudentClubs.models.Club;
+import com.softuni.StudentClubs.models.entities.Club;
 
 import java.util.List;
 

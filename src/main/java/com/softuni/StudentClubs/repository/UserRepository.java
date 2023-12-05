@@ -1,6 +1,6 @@
 package com.softuni.StudentClubs.repository;
 
-import com.softuni.StudentClubs.models.UserEntity;
+import com.softuni.StudentClubs.models.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {

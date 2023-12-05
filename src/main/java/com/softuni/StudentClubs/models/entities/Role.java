@@ -1,14 +1,11 @@
-package com.softuni.StudentClubs.models;
+package com.softuni.StudentClubs.models.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,4 +24,9 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     private List<UserEntity> users = new ArrayList<>();
+
+
+
+    public Role(String s) {
+    }
 }

@@ -4,8 +4,8 @@ import com.softuni.StudentClubs.dto.RegistrationDto;
 import com.softuni.StudentClubs.dto.RoleDto;
 import com.softuni.StudentClubs.dto.UserEditDto;
 import com.softuni.StudentClubs.dto.UserViewDto;
-import com.softuni.StudentClubs.models.Role;
-import com.softuni.StudentClubs.models.UserEntity;
+import com.softuni.StudentClubs.models.entities.Role;
+import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.repository.RoleRepository;
 import com.softuni.StudentClubs.repository.UserRepository;
 import com.softuni.StudentClubs.service.UserService;
@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setEmail(registrationDto.getEmail());
         userEntity.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
         Role role = roleRepository.findByName("USER");
-        userEntity.setRoles(Arrays.asList(role));
+        userEntity.setRoles(Collections.singletonList(role));
         userEntity.setActive(true);
         userRepository.save(userEntity);
         this.emailService.sendRegistrationEmail(registrationDto.getEmail(), registrationDto.getUsername());
@@ -66,37 +67,26 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public UserViewDto findById(Long id) {
-        return userRepository.findById(id)
-                .map(this::getUserViewDto)
-                .orElse(null);
-    }
-
-
-    @Override
-    public List<UserViewDto> getAllUsers() {
-        return this.userRepository.findAll().stream()
-                .map(this::getUserViewDto)
-                .collect(Collectors.toList());
-    }
-
-
     private UserViewDto getUserViewDto(UserEntity userEntity) {
+        if (userEntity == null) {
+            return null;
+        }
+        List<RoleDto> roleDto = userEntity.getRoles() != null ?
+                userEntity.getRoles().stream()
+                        .map(Role::getName)
+                        .map(RoleDto::new)
+                        .collect(Collectors.toList()) :
+                Collections.emptyList();
+
         return new UserViewDto(
                 userEntity.getId(),
                 userEntity.getUsername(),
                 userEntity.getEmail(),
-                getRoleDtoList(userEntity),
-        userEntity.isActive());
+                userEntity.getRoles(),
+                userEntity.isActive()
+        );
     }
 
-    private List<RoleDto> getRoleDtoList(UserEntity userEntity) {
-        return userEntity.getRoles().stream()
-                .map(Role::getName)
-                .map(RoleDto::new)
-                .collect(Collectors.toList());
-    }
 
 
 }

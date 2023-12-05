@@ -1,7 +1,7 @@
 package com.softuni.StudentClubs.controller;
 
 import com.softuni.StudentClubs.dto.UserEditDto;
-import com.softuni.StudentClubs.models.UserEntity;
+import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.security.SecurityUtil;
 import com.softuni.StudentClubs.service.UserService;
 import org.springframework.stereotype.Controller;

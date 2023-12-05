@@ -1,19 +1,19 @@
-package com.softuni.StudentClubs.models;
+package com.softuni.StudentClubs.models.entities;
 
-import com.softuni.StudentClubs.dto.RoleDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Getter
-@Setter
+
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity(name = "users")
 public class UserEntity {
 
@@ -21,10 +21,14 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, length = 30, nullable = false)
     private String username;
 
+    @Email
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -35,20 +39,7 @@ public class UserEntity {
 
     private boolean isActive;
 
+    private LocalDateTime updatedOn;
 
-        public List<RoleDto> getRoleDtoList(UserEntity userEntity) {
-            return userEntity.getRoles().stream()
-                    .map(Role::getName)
-                    .map(RoleDto::new)
-                    .collect(Collectors.toList());
 
-    }
-
-    public void addRole(Role role) {
-            this.roles.add(role);
-    }
-
-    public void removeRole(Role admin) {
-            this.roles.remove(admin);
-    }
 }

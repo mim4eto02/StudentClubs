@@ -3,7 +3,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layout}">
 <head>
-    <title>Club Create</title>
+    <title>Club Detail</title>
 </head>
 <body class="d-flex flex-column">
 
@@ -24,13 +24,22 @@
                 <div class="card mb-4">
                     <a href="#!"><img class="card-img-top" th:src="${club.photoUrl}" alt="..." /></a>
                     <div class="card-body">
-                        <div class="small text-muted" th:text="'Created on:' + ${club.createdOn}"></div>
+                        <div class="small text-muted" th:text="'Created on: ' + ${club.createdOn}"></div>
+                        <div class="small text-muted" th:if="${club.address != ''}" th:text="'Address: ' + ${club.address}"></div>
                         <h2 class="card-title">About this club:</h2>
+                        <div class="small text-muted" th:text="'Type: ' + ${club.type}"></div>
                         <p class="card-text" th:text="${club.content}"></p>
-                        <div th:if="${user.id} == ${club.createdBy.id}">
-                            <a class="btn btn-primary" th:href="@{/clubs/{clubId}/delete(clubId=${club.id})}">Delete</a>
-                            <a class="btn btn-primary" th:href="@{/events/{clubId}/new(clubId=${club.id})}">Create Event</a>
+                        <div class="d-flex mb-3" >
+                        <div th:if="${user != null and user.id == club.createdBy.id or #authorization.expression('hasAuthority(''ADMIN'')')}">
+                            <a class="btn btn-primary m-lg-1" th:href="@{/clubs/{clubId}/delete(clubId=${club.id})}">Delete</a>
                         </div>
+                        <div th:if="${user != null and user.id == club.createdBy.id}">
+                        <a class="btn btn-primary m-lg-1" th:href="@{/events/{clubId}/new(clubId=${club.id})}">Create Event</a>
+
+                        </div>
+                        </div>
+
+
                     </div>
                 </div>
                 <!-- Nested row for non-featured blog posts-->
@@ -54,18 +63,18 @@
 
                 </div>
                 <!-- Pagination-->
-                <nav aria-label="Pagination">
-                    <hr class="my-0" />
-                    <ul class="pagination justify-content-center my-4">
-                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
-                        <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">15</a></li>
-                        <li class="page-item"><a class="page-link" href="#!">Older</a></li>
-                    </ul>
-                </nav>
+<!--                <nav aria-label="Pagination">-->
+<!--                    <hr class="my-0" />-->
+<!--                    <ul class="pagination justify-content-center my-4">-->
+<!--                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>-->
+<!--                        <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>-->
+<!--                        <li class="page-item"><a class="page-link" href="#!">2</a></li>-->
+<!--                        <li class="page-item"><a class="page-link" href="#!">3</a></li>-->
+<!--                        <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>-->
+<!--                        <li class="page-item"><a class="page-link" href="#!">15</a></li>-->
+<!--                        <li class="page-item"><a class="page-link" href="#!">Older</a></li>-->
+<!--                    </ul>-->
+<!--                </nav>-->
             </div>
             <!-- Side widgets-->
             <div class="col-lg-4">

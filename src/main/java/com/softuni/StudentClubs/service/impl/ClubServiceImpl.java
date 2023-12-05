@@ -3,8 +3,8 @@ package com.softuni.StudentClubs.service.impl;
 
 import com.softuni.StudentClubs.dto.ClubDto;
 import com.softuni.StudentClubs.mapper.ClubMapper;
-import com.softuni.StudentClubs.models.Club;
-import com.softuni.StudentClubs.models.UserEntity;
+import com.softuni.StudentClubs.models.entities.Club;
+import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.repository.ClubRepository;
 import com.softuni.StudentClubs.repository.UserRepository;
 import com.softuni.StudentClubs.security.SecurityUtil;
@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 public class ClubServiceImpl implements ClubService {
 
 
-    private ClubRepository clubRepository;
+    private final ClubRepository clubRepository;
 
     public ClubServiceImpl(ClubRepository clubRepository, UserRepository userRepository) {
         this.clubRepository = clubRepository;
         this.userRepository = userRepository;
     }
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<ClubDto> findAllClubs() {

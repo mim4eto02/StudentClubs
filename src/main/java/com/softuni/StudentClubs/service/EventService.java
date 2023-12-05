@@ -18,4 +18,5 @@ public interface EventService {
     List<EventDto> searchByTitle(String query);
 
     List<EventDto> findAllPastEvents();
+
 }

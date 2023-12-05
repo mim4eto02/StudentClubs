@@ -1,6 +1,6 @@
 package com.softuni.StudentClubs.repository;
 
-import com.softuni.StudentClubs.models.Club;
+import com.softuni.StudentClubs.models.entities.Club;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -6,4 +6,8 @@ public interface EmailService {
 
     void sendContactEmail(String name, String email, String subject, String message);
 
+    void sendDeactivationEmail(String email, String username);
+
+    void sendActivationEmail(String email, String username);
+
 }

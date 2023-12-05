@@ -1,6 +1,7 @@
 package com.softuni.StudentClubs.security;
 
-import com.softuni.StudentClubs.models.UserEntity;
+import com.softuni.StudentClubs.exception.InactiveUserException;
+import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -24,6 +25,9 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = this.userRepository.findFirstByUsername(username);
         if (userEntity != null) {
+            if (!userEntity.isActive()) {
+                throw new InactiveUserException("User is not active.");
+            }
             User authUser = new User(
                     userEntity.getUsername(),
                     userEntity.getPassword(),
@@ -34,6 +38,4 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
     }
-
-
 }

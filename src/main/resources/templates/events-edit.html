@@ -38,23 +38,7 @@
                                     <div class="d-flex flex-row align-items-center mb-3">
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
-                                            <label class="form-label" for="type">Type</label>
-
-                                            <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="type"
-                                                    name="type"
-                                                    th:field="*{type}"
-                                                    placeholder="Event Type">
-                                            <p th:if="${#fields.hasErrors('type')}" class="text-danger" th:errors="*{type}">Photo Url Error</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex flex-row align-items-center mb-3">
-                                        <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                                        <div class="form-outline flex-fill mb-0">
-                                            <label class="form-label" for="type">Photo Url</label>
+                                            <label class="form-label" for="photoUrl">Photo Url</label>
 
                                             <input
                                                     type="text"
@@ -68,9 +52,25 @@
                                     </div>
 
                                     <div class="d-flex flex-row align-items-center mb-3">
+                                        <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="location">Location</label>
+
+                                            <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="location"
+                                                    name="name"
+                                                    th:field="*{location}"
+                                                    placeholder="Event Name">
+                                            <p th:if="${#fields.hasErrors('location')}" class="text-danger" th:errors="*{location}">Title Error</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-3">
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
-                                            <label class="form-label" for="type">Start Time</label>
+                                            <label class="form-label" for="startTime">Start Time</label>
 
                                             <input
                                                     type="datetime-local"
@@ -86,7 +86,7 @@
                                     <div class="d-flex flex-row align-items-center mb-3">
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
-                                            <label class="form-label" for="type">End Time</label>
+                                            <label class="form-label" for="endTime">End Time</label>
 
                                             <input
                                                     type="datetime-local"
@@ -102,7 +102,7 @@
                                     <div class="d-flex flex-row align-items-center mb-2">
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
-                                            <label class="form-label" for="type">Description</label>
+                                            <label class="form-label" for="description">Description</label>
 
                                             <textarea
                                                     type="text"
@@ -114,6 +114,21 @@
                                                     rows="4"> </textarea>
                                             <p th:if="${#fields.hasErrors('description')}" class="text-danger" th:errors="*{description}">Description Error</p>
                                         </div>
+                                    </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-3">
+                                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label for="category">Type:</label>
+
+                                                <select id="category" th:field="*{type}">
+                                                    <option
+                                                            th:each="type : ${T(com.softuni.StudentClubs.models.enums.EventTypeEnum).values()}"
+                                                            th:value="${type}"
+                                                            th:text="${type}">Type</option>
+                                                </select>
+                                                <p th:if="${#fields.hasErrors('type')}" class="text-danger" th:errors="*{type}">Title Error</p>
+                                            </div>
                                     </div>
 
                                     <div class="d-flex justify-content-center mb-3">

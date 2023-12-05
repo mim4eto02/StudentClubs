@@ -1,7 +1,7 @@
 package com.softuni.StudentClubs.mapper;
 
 import com.softuni.StudentClubs.dto.ClubDto;
-import com.softuni.StudentClubs.models.Club;
+import com.softuni.StudentClubs.models.entities.Club;
 
 import java.util.stream.Collectors;
 
@@ -14,6 +14,8 @@ public class ClubMapper {
                 .title(clubDto.getTitle())
                 .photoUrl(clubDto.getPhotoUrl())
                 .content(clubDto.getContent())
+                .type(clubDto.getType())
+                .address(clubDto.getAddress())
                 .createdBy(clubDto.getCreatedBy())
                 .createdOn(clubDto.getCreatedOn())
                 .updatedOn(clubDto.getUpdatedOn())
@@ -28,6 +30,8 @@ public class ClubMapper {
                 .title(club.getTitle())
                 .photoUrl(club.getPhotoUrl())
                 .content(club.getContent())
+                .type(club.getType())
+                .address(club.getAddress())
                 .createdBy(club.getCreatedBy())
                 .createdOn(club.getCreatedOn())
                 .updatedOn(club.getUpdatedOn())

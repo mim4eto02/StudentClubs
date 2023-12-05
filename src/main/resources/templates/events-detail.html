@@ -18,21 +18,26 @@
         <div class="col-md-6" >
             <div class="small mb-1 mt-2"><b> Start time: </b>[[${event.startTime}]]</div>
             <div class="small mb-1 "><b> End time: </b>[[${event.endTime}]]</div>
+            <div class="small mb-1 " th:if="${event.location != ''}"><b> Location: </b>[[${event.location}]]</div>
 
 
             <h1 class="display-5 fw-bolder" th:text="${event.name}"></h1>
 
             <div class="small mb-1 "><b> Club: </b>[[${event.club.title}]]</div>
+            <div class="small mb-1 "><b> Type: </b>[[${event.type}]]</div>
 
             <p class="lead" th:text="${event.description}"></p>
             <div class="d-flex mb-3" >
                 <div th:if="${user.id} != ${event.club.createdBy.id}">
-                    <a class="btn btn-primary" th:href="@{/events/{eventId}/delete(eventId=${event.id})}">Join</a>
+                    <a class="btn btn-primary m-lg-1" th:href="@{/events/{eventId}/delete(eventId=${event.id})}">Join</a>
                 </div>
-                <div th:if="${user.id} == ${event.club.createdBy.id}">
-                    <a class="btn btn-primary" th:href="@{/events/{eventId}/delete(eventId=${event.id})}">Delete</a>
-                    <a th:href="@{/events/{eventId}/edit(eventId=${event.id})}" class="btn btn-primary">Edit</a>
+                <div th:if="${user.id == event.club.createdBy.id or #authorization.expression('hasAuthority(''ADMIN'')')}">
+                    <a class="btn btn-primary m-lg-1" th:href="@{/events/{eventId}/delete(eventId=${event.id})}">Delete</a>
                 </div>
+                    <div th:if="${user.id == event.club.createdBy.id}">
+                    <a th:href="@{/events/{eventId}/edit(eventId=${event.id})}" class="btn btn-primary m-lg-1">Edit</a>
+                </div>
+
             </div>
         </div>
     </div>

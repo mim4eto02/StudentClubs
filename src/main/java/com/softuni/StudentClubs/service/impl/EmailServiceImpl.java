@@ -42,7 +42,7 @@ public class EmailServiceImpl implements EmailService {
 
     }
 
-    private String generateMessageContentRegistration(String username) {
+    public String generateMessageContentRegistration(String username) {
         Context context = new Context();
         context.setVariable("username", username);
         return templateEngine.process("email/registration", context);
@@ -58,12 +58,11 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setTo("sstudent_clubs@example.com");
             mimeMessageHelper.setSubject(subject);
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("Name: ").append(name).append(System.lineSeparator());
-            sb.append("Email: ").append(email).append(System.lineSeparator());
-            sb.append("Message: ").append(message).append(System.lineSeparator());
+            String sb = "Name: " + name + System.lineSeparator() +
+                    "Email: " + email + System.lineSeparator() +
+                    "Message: " + message + System.lineSeparator();
 
-            mimeMessageHelper.setText(sb.toString());
+            mimeMessageHelper.setText(sb);
 
             javaMailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (Exception e) {
@@ -71,4 +70,53 @@ public class EmailServiceImpl implements EmailService {
         }
 
     }
+
+    @Override
+    public void sendDeactivationEmail(String email, String username) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+
+        try {
+            mimeMessageHelper.setFrom("student_club@example.com");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setSubject("Account deactivated");
+            mimeMessageHelper.setText(generateMessageContentDeactivation(username), true);
+
+            javaMailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+
+    }
 }
+
+    @Override
+    public void sendActivationEmail(String email, String username) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+
+        try {
+            mimeMessageHelper.setFrom("student_clubs@example.com");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setSubject("Account activated");
+            mimeMessageHelper.setText(generateMessageContentActivation(username), true);
+
+            javaMailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String generateMessageContentActivation(String username) {
+        Context context = new Context();
+        context.setVariable("username", username);
+        return templateEngine.process("email/activation", context);
+    }
+
+    private String generateMessageContentDeactivation(String username) {
+        Context context = new Context();
+        context.setVariable("username", username);
+        return templateEngine.process("email/deactivation", context);
+    }
+    }

@@ -1,6 +1,7 @@
 package com.softuni.StudentClubs.controller;
 
 import com.softuni.StudentClubs.dto.ContactDto;
+import com.softuni.StudentClubs.service.ContactService;
 import com.softuni.StudentClubs.service.impl.EmailServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,8 +19,12 @@ public class ContactController {
 
     private final EmailServiceImpl emailService;
 
-    public ContactController(EmailServiceImpl emailService) {
+    private final ContactService contactService;
+
+
+    public ContactController(EmailServiceImpl emailService, ContactService contactService) {
         this.emailService = emailService;
+        this.contactService = contactService;
     }
 
     @GetMapping
@@ -42,6 +47,9 @@ public class ContactController {
 
         this.emailService.sendContactEmail(contactDTO.getName(), contactDTO.getEmail(),
                 contactDTO.getSubject(), contactDTO.getMessage());
+        contactService.saveContact(contactDTO);
+
+
         return "redirect:/";
     }
 

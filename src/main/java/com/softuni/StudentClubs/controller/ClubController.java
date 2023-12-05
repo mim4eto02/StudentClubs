@@ -1,8 +1,8 @@
 package com.softuni.StudentClubs.controller;
 
 import com.softuni.StudentClubs.dto.ClubDto;
-import com.softuni.StudentClubs.models.Club;
-import com.softuni.StudentClubs.models.UserEntity;
+import com.softuni.StudentClubs.models.entities.Club;
+import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.security.SecurityUtil;
 import com.softuni.StudentClubs.service.ClubService;
 import com.softuni.StudentClubs.service.UserService;
@@ -17,9 +17,9 @@ import java.util.List;
 @Controller
 public class ClubController {
 
-    private ClubService clubService;
+    private final ClubService clubService;
 
-    private UserService userService;
+    private final UserService userService;
 
     public ClubController(ClubService clubService, UserService userService) {
         this.clubService = clubService;
@@ -43,14 +43,13 @@ public class ClubController {
 
     @GetMapping("/clubs/{clubId}")
     public String clubDetail(@PathVariable("clubId") long clubId, Model model) {
-        UserEntity user = new UserEntity();
+        UserEntity user = null;
         ClubDto club = clubService.findClubById(clubId);
         String username = SecurityUtil.getSessionUser();
         if (username != null) {
             user = userService.findByUsername(username);
             model.addAttribute("user", user);
         }
-        model.addAttribute("user", user);
         model.addAttribute("club", club);
         return "clubs-detail";
     }

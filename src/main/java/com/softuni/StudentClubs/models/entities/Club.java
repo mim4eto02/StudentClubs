@@ -1,5 +1,6 @@
-package com.softuni.StudentClubs.models;
+package com.softuni.StudentClubs.models.entities;
 
+import com.softuni.StudentClubs.models.enums.ClubTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,12 +25,13 @@ public class Club {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition="TEXT", length = 2000)
+    @Column(columnDefinition="TEXT", length = 2000, nullable = false)
     private String photoUrl;
 
-    @Column(columnDefinition="TEXT", length = 2000)
+    @Column(columnDefinition="TEXT", length = 2000, nullable = false)
     private String content;
 
     @CreationTimestamp
@@ -38,6 +40,13 @@ public class Club {
     @UpdateTimestamp
     private LocalDate updatedOn;
 
+//    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ClubTypeEnum type;
+
+    @Column(columnDefinition="TEXT", length = 2000, nullable = true)
+    private String address;
+
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false)
     private UserEntity createdBy;
@@ -45,5 +54,4 @@ public class Club {
     @OneToMany(mappedBy = "club", cascade = CascadeType.REMOVE)
     private List<Event> events = new ArrayList<>();
 
-    // TODO - add a field for club category
 }

@@ -1,7 +1,7 @@
 package com.softuni.StudentClubs.controller;
 
 import com.softuni.StudentClubs.dto.RegistrationDto;
-import com.softuni.StudentClubs.models.UserEntity;
+import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @Controller
 public class AuthController {
-    private UserService userService;
+    private final UserService userService;
 
     public AuthController(UserService userService) {
         this.userService = userService;

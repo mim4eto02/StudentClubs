@@ -1,8 +1,11 @@
 package com.softuni.StudentClubs.dto;
 
-import com.softuni.StudentClubs.models.UserEntity;
+import com.softuni.StudentClubs.models.entities.UserEntity;
+import com.softuni.StudentClubs.models.enums.ClubTypeEnum;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -11,6 +14,8 @@ import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClubDto {
 
     private Long id;
@@ -19,11 +24,15 @@ public class ClubDto {
     private String title;
 
     @NotEmpty(message = "Club photo is required.")
-    @Size(min = 5, max = 2000, message = "Photo URL must be between 14 and 2000 characters.")
+    @Size(min = 5, max = 2000, message = "Photo URL must be between 5 and 2000 characters.")
     private String photoUrl;
 
     @NotEmpty(message = "Club content is required.")
     private String content;
+
+    private String address;
+
+    private ClubTypeEnum type;
 
     private UserEntity createdBy;
 

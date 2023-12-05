@@ -1,6 +1,5 @@
 package com.softuni.StudentClubs.dto;
 
-import jdk.jfr.StackTrace;
 import lombok.*;
 
 @Getter
