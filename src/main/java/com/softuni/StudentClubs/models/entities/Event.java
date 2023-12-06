@@ -53,6 +53,4 @@ public class Event {
     @JoinColumn(name = "club_id", nullable = false)
     private Club club;
 
-    // TODO - add a field for event category
-
 }

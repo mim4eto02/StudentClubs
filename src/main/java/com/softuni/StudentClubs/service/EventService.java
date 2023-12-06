@@ -19,4 +19,5 @@ public interface EventService {
 
     List<EventDto> findAllPastEvents();
 
+    void sendCalendarInvitation(Long eventId, String email );
 }

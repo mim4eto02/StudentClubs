@@ -10,6 +10,8 @@
 <section layout:fragment="body">
     <div class="container h-100">
         <div class="row d-flex align-items-center justify-content-center h-100">
+            <div th:if="${param.success}" class="alert alert-success">
+                Information for this event was sent to your email.</div>
             <div class="col-lg-12 col-xl-11">
                 <div class="card text-black" style="border-radius: 25px;">
 
@@ -28,9 +30,15 @@
 
             <p class="lead" th:text="${event.description}"></p>
             <div class="d-flex mb-3" >
-                <div th:if="${user.id} != ${event.club.createdBy.id}">
-                    <a class="btn btn-primary m-lg-1" th:href="@{/events/{eventId}/delete(eventId=${event.id})}">Join</a>
-                </div>
+<!--                <div>-->
+<!--                    <a class="btn btn-primary m-lg-1" th:href="@{/events/{eventId}/invite(eventId=${event.id})}">Join</a>-->
+<!--                </div>-->
+
+                <form sec:authorize="isAuthenticated()" th:action="@{/events/{eventId}/invite(eventId=${event.id})}" method="post">
+                    <button class="btn btn-primary m-lg-1 border-1" type="submit">Send me information</button>
+                </form>
+
+
                 <div th:if="${user.id == event.club.createdBy.id or #authorization.expression('hasAuthority(''ADMIN'')')}">
                     <a class="btn btn-primary m-lg-1" th:href="@{/events/{eventId}/delete(eventId=${event.id})}">Delete</a>
                 </div>

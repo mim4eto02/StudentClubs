@@ -1,12 +1,14 @@
 package com.softuni.StudentClubs.service.impl;
 
 import com.softuni.StudentClubs.service.EmailService;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Service
@@ -55,7 +57,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
             mimeMessageHelper.setFrom(email);
-            mimeMessageHelper.setTo("sstudent_clubs@example.com");
+            mimeMessageHelper.setTo("student_clubs@example.com");
             mimeMessageHelper.setSubject(subject);
 
             String sb = "Name: " + name + System.lineSeparator() +
@@ -107,6 +109,25 @@ public class EmailServiceImpl implements EmailService {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void sendEmailWithAttachment(String email, String subject, String body, byte[] calendarAttachment, String s) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper.setFrom("student-clubs@example.com");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setSubject(subject);
+            mimeMessageHelper.setText(body, true);
+            mimeMessageHelper.addAttachment(s, new ByteArrayResource(calendarAttachment));
+
+            javaMailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private String generateMessageContentActivation(String username) {
         Context context = new Context();

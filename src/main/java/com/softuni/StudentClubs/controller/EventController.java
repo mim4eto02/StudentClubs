@@ -1,6 +1,5 @@
 package com.softuni.StudentClubs.controller;
 
-import com.softuni.StudentClubs.dto.ClubDto;
 import com.softuni.StudentClubs.dto.EventDto;
 import com.softuni.StudentClubs.models.entities.Event;
 import com.softuni.StudentClubs.models.entities.UserEntity;
@@ -23,13 +22,10 @@ public class EventController {
 
     private final UserService userService;
 
-    private final ClubService clubService;
 
-
-    public EventController(EventService eventService, UserService userService, ClubService clubService) {
+    public EventController(EventService eventService, UserService userService) {
         this.eventService = eventService;
         this.userService = userService;
-        this.clubService = clubService;
     }
 
     @GetMapping("/events")
@@ -137,4 +133,18 @@ public class EventController {
         return "redirect:/events";
     }
 
+    @PostMapping("/events/{eventId}/invite")
+    public String sendInvitation(@PathVariable("eventId") Long eventId, Model model) {
+
+        String email = SecurityUtil.getSessionUser();
+        if (email != null) {
+            try {
+                eventService.sendCalendarInvitation(eventId, email);
+                model.addAttribute("invitationMessage", "Invitation sent");
+            } catch (Exception e) {
+                model.addAttribute("invitationMessage", "Error sending invitations: " + e.getMessage());
+            }
+        }
+        return "redirect:/events/" + eventId + "?success";
+    }
 }
