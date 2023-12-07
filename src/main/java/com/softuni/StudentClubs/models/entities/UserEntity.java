@@ -1,5 +1,6 @@
 package com.softuni.StudentClubs.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
                joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

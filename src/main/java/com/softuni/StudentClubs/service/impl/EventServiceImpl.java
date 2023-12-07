@@ -9,6 +9,9 @@ import com.softuni.StudentClubs.repository.EventRepository;
 import com.softuni.StudentClubs.repository.UserRepository;
 import com.softuni.StudentClubs.service.EmailService;
 import com.softuni.StudentClubs.service.EventService;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -93,7 +96,8 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-     private String generateInvitationEmailContent(Event event) {
+
+    private String generateInvitationEmailContent(Event event) {
          String sb = "You have been invited to the following event: " + event.getName() + System.lineSeparator() +
                  "Start time: " + formatDateTime(event.getStartTime()) + System.lineSeparator() +
                  "End time: " + formatDateTime(event.getEndTime()) + System.lineSeparator() +

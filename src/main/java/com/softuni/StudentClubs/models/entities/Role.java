@@ -1,5 +1,7 @@
 package com.softuni.StudentClubs.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,6 +22,7 @@ public class Role {
 
     private String name;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "roles")
     private List<UserEntity> users = new ArrayList<>();
 

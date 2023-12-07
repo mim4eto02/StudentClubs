@@ -1,7 +1,9 @@
 package com.softuni.StudentClubs.service;
 
 import com.softuni.StudentClubs.dto.EventDto;
+import org.springframework.hateoas.CollectionModel;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface EventService {
@@ -20,4 +22,5 @@ public interface EventService {
     List<EventDto> findAllPastEvents();
 
     void sendCalendarInvitation(Long eventId, String email );
+
 }

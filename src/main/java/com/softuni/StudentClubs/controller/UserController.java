@@ -51,4 +51,9 @@ public class UserController {
         return "redirect:/logout";
     }
 
+    @GetMapping("users")
+    public String showUsers() {
+        return "users";
+    }
+
 }

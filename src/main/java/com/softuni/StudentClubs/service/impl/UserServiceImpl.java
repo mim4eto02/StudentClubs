@@ -1,7 +1,11 @@
 package com.softuni.StudentClubs.service.impl;
 
+import com.softuni.StudentClubs.controller.UserController;
 import com.softuni.StudentClubs.dto.RegistrationDto;
+import com.softuni.StudentClubs.dto.RoleDto;
 import com.softuni.StudentClubs.dto.UserEditDto;
+import com.softuni.StudentClubs.dto.UserViewDto;
+import com.softuni.StudentClubs.exception.UserNotFoundException;
 import com.softuni.StudentClubs.models.entities.Role;
 import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.models.events.UserRegistrationEvent;
@@ -9,10 +13,14 @@ import com.softuni.StudentClubs.repository.RoleRepository;
 import com.softuni.StudentClubs.repository.UserRepository;
 import com.softuni.StudentClubs.service.UserService;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -66,8 +74,23 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public List<UserViewDto> getAllUsers() {
+        List<UserEntity> users = userRepository.findAll();
+        return users.stream()
+                .map(this::mapToUserViewDto)
+                .collect(Collectors.toList());
+    }
 
-
+    private UserViewDto mapToUserViewDto(UserEntity userEntity) {
+        UserViewDto userViewDto = new UserViewDto();
+        userViewDto.setId(userEntity.getId());
+        userViewDto.setUsername(userEntity.getUsername());
+        userViewDto.setEmail(userEntity.getEmail());
+        userViewDto.setRoles(userEntity.getRoles());
+        userViewDto.setActive(userEntity.isActive());
+        return userViewDto;
+    }
 
 
 }
