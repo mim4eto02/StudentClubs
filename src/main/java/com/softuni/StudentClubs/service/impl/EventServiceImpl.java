@@ -27,14 +27,11 @@ public class EventServiceImpl implements EventService {
     private final ClubRepository clubRepository;
     private final EventRepository eventRepository;
 
-    private final UserRepository userRepository;
-
     private final EmailService emailService;
 
-    public EventServiceImpl(ClubRepository clubRepository, EventRepository eventRepository, UserRepository userRepository, EmailService emailService) {
+    public EventServiceImpl(ClubRepository clubRepository, EventRepository eventRepository, EmailService emailService) {
         this.clubRepository = clubRepository;
         this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
         this.emailService = emailService;
     }
 

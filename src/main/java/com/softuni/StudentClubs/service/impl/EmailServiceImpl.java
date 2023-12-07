@@ -11,6 +11,8 @@ import org.thymeleaf.context.Context;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+
 @Service
 public class EmailServiceImpl implements EmailService {
 
@@ -127,6 +129,7 @@ public class EmailServiceImpl implements EmailService {
             throw new RuntimeException(e);
         }
     }
+
 
 
     private String generateMessageContentActivation(String username) {

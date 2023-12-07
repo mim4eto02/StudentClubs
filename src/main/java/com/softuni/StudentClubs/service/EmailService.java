@@ -11,4 +11,5 @@ public interface EmailService {
     void sendActivationEmail(String email, String username);
 
     void sendEmailWithAttachment(String email, String subject, String body, byte[] calendarAttachment, String s);
+
 }
