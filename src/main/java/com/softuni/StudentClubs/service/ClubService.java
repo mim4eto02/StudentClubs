@@ -1,6 +1,6 @@
 package com.softuni.StudentClubs.service;
 
-import com.softuni.StudentClubs.dto.ClubDto;
+import com.softuni.StudentClubs.models.dto.ClubDto;
 import com.softuni.StudentClubs.models.entities.Club;
 
 import java.util.List;
@@ -19,4 +19,5 @@ public interface ClubService {
     List<ClubDto> searchByTitle(String query);
 
     List<ClubDto> findClubsByUserId(Long id);
+
 }

@@ -1,6 +1,6 @@
 package com.softuni.StudentClubs.controller;
 
-import com.softuni.StudentClubs.dto.ContactDto;
+import com.softuni.StudentClubs.models.dto.ContactDto;
 import com.softuni.StudentClubs.service.ContactService;
 import com.softuni.StudentClubs.service.impl.EmailServiceImpl;
 import org.springframework.stereotype.Controller;

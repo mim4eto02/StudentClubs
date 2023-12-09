@@ -1,7 +1,7 @@
 package com.softuni.StudentClubs.service.impl;
 
 
-import com.softuni.StudentClubs.dto.ClubDto;
+import com.softuni.StudentClubs.models.dto.ClubDto;
 import com.softuni.StudentClubs.mapper.ClubMapper;
 import com.softuni.StudentClubs.models.entities.Club;
 import com.softuni.StudentClubs.models.entities.UserEntity;
@@ -9,9 +9,14 @@ import com.softuni.StudentClubs.repository.ClubRepository;
 import com.softuni.StudentClubs.repository.UserRepository;
 import com.softuni.StudentClubs.security.SecurityUtil;
 import com.softuni.StudentClubs.service.ClubService;
+import com.softuni.StudentClubs.service.EmailService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.softuni.StudentClubs.exception.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,8 +25,11 @@ public class ClubServiceImpl implements ClubService {
 
     private final ClubRepository clubRepository;
 
-    public ClubServiceImpl(ClubRepository clubRepository, UserRepository userRepository) {
+    private final EmailService emailService;
+
+    public ClubServiceImpl(ClubRepository clubRepository, EmailService emailService, UserRepository userRepository) {
         this.clubRepository = clubRepository;
+        this.emailService = emailService;
         this.userRepository = userRepository;
     }
 
@@ -59,9 +67,25 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public void deleteClubById(long clubId) {
-        clubRepository.deleteById(clubId);
-    }
+    public void deleteClubById ( long clubId) throws NotFoundException {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Optional<Club> clubOptional = clubRepository.findById(clubId);
+
+            if (clubOptional.isPresent()) {
+                Club club = clubOptional.get();
+                String nameClub = club.getTitle();
+                String email = club.getCreatedBy().getEmail();
+
+                clubRepository.deleteById(clubId);
+
+                if (authentication.getAuthorities().stream().anyMatch(
+                        grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"))) {
+                    emailService.sendDeletionEmail("Club", nameClub, email);
+                }
+            } else {
+                throw new NotFoundException(clubId);
+            }
+        }
 
     @Override
     public List<ClubDto> searchByTitle(String query) {

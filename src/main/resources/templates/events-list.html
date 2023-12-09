@@ -19,17 +19,20 @@
                         <input name="query" class="form-control mr-sm-2 mb-5" type="search" placeholder="Search here events" aria-label="Search">
                     </form>
                 </div>
-                <div th:each="event :${events}" class="col-lg-6 mb-2">
-                    <div class="position-relative mb-3">
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div th:each="event :${events}" class="card mb-4">
+                    <div class="card-body">
                         <img class="card-img-top rounded-3 mb-3" th:src="${event.photoUrl}" alt="..." />
-                        <a th:text="${event.name}" class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="#!"></a>
-                    </div>
+                        <h2 th:text="${event.name}" class="card-title h4"></h2>
+
 
                     <a th:href="@{/events/{eventId}(eventId=${event.id})}" class="btn btn-primary">View</a>
                     <a th:if="${user.id} == ${event.club.createdBy.id}" th:href="@{/events/{eventId}/edit(eventId=${event.id})}" class="btn btn-primary">Edit</a>
 
                 </div>
-                <a class="btn btn-primary fs-1 text-center align-self-center" th:action="@{/events/past}" th:href="@{/events/past}">Past Events</a>
+                </div>
+                </div>
+                <a class="btn btn-primary fs-1 text-center align-self-center"  th:if="${#httpServletRequest.requestURL.toString() == 'http://localhost:8080/events'}" th:action="@{/events/past}" th:href="@{/events/past}">Past Events</a>
 
             </div>
         </div>

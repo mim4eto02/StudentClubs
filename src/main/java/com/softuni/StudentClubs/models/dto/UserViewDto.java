@@ -1,4 +1,4 @@
-package com.softuni.StudentClubs.dto;
+package com.softuni.StudentClubs.models.dto;
 
 import com.softuni.StudentClubs.models.entities.Role;
 import lombok.*;

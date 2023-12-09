@@ -2,6 +2,7 @@ package com.softuni.StudentClubs.service.impl;
 
 import com.softuni.StudentClubs.service.EmailService;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
@@ -27,23 +29,31 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendRegistrationEmail(String email, String username) {
-
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
-
-
         try {
-            mimeMessageHelper.setFrom("student_clubs@example.com");
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            // Set 'From' address
+            mimeMessageHelper.setFrom(new InternetAddress("student_clubs@example.com"));
+
+            // Set 'To' address
             mimeMessageHelper.setTo(email);
+
+            // Set email subject
             mimeMessageHelper.setSubject("Welcome to Student Clubs!");
+
+            // Set email content using Thymeleaf template
             mimeMessageHelper.setText(generateMessageContentRegistration(username), true);
 
-            javaMailSender.send(mimeMessageHelper.getMimeMessage());
+            // Logging for debugging
+            System.out.println("javaMailSender: " + javaMailSender);
+            System.out.println("mimeMessage: " + mimeMessage);
+
+            // Send the email
+            javaMailSender.send(mimeMessage);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public String generateMessageContentRegistration(String username) {
@@ -91,8 +101,8 @@ public class EmailServiceImpl implements EmailService {
         } catch (Exception e) {
             throw new RuntimeException(e);
 
+        }
     }
-}
 
     @Override
     public void sendActivationEmail(String email, String username) {
@@ -130,6 +140,30 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Override
+    public void sendDeletionEmail(String entityName, String entityTitle, String email) {
+        String subject = "Deletion Notification: " + entityName;
+        String body = "The " + entityName + " '" + entityTitle + "' has been deleted because of violation the terms.\n" +
+                "You can read the terms in our site.\n" +
+                "You can make a new " + entityName + " if you want.\n" + "Thank you for your understanding.\n" + "Student Clubs Team";
+        sendSimpleEmail(email, subject, body);
+    }
+
+    private void sendSimpleEmail(String email, String subject, String body) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+            mimeMessageHelper.setFrom("student-club@example.com");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setSubject(subject);
+            mimeMessageHelper.setText(body);
+
+            javaMailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     private String generateMessageContentActivation(String username) {
@@ -143,4 +177,4 @@ public class EmailServiceImpl implements EmailService {
         context.setVariable("username", username);
         return templateEngine.process("email/deactivation", context);
     }
-    }
+}

@@ -1,6 +1,6 @@
 package com.softuni.StudentClubs.controller;
 
-import com.softuni.StudentClubs.dto.ClubDto;
+import com.softuni.StudentClubs.models.dto.ClubDto;
 import com.softuni.StudentClubs.models.entities.Club;
 import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.security.SecurityUtil;

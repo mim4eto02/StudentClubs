@@ -7,5 +7,9 @@ import java.util.List;
 
 public interface RoleService {
 
+    void initRoles();
+
+    void createRoleIfNotExist(String name);
+
 
 }

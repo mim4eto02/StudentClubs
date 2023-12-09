@@ -1,9 +1,10 @@
-package com.softuni.StudentClubs.dto;
+package com.softuni.StudentClubs.models.dto;
 
 import com.softuni.StudentClubs.models.entities.Club;
 import com.softuni.StudentClubs.models.enums.EventTypeEnum;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
-public class EventDto {
+public class EventDto extends RepresentationModel<EventDto> {
 
     private Long id;
 

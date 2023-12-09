@@ -12,4 +12,5 @@ public interface EmailService {
 
     void sendEmailWithAttachment(String email, String subject, String body, byte[] calendarAttachment, String s);
 
+    void sendDeletionEmail (String entityName, String entityTitle, String email);
 }

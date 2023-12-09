@@ -1,4 +1,4 @@
-package com.softuni.StudentClubs.unitTests;
+package com.softuni.StudentClubs.service.impl;
 
 import com.softuni.StudentClubs.models.entities.Role;
 import com.softuni.StudentClubs.models.entities.UserEntity;
@@ -12,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -55,7 +53,6 @@ public class AdminServiceImplTest {
 
 //    @Test
 //    void testMakeAdmin() {
-//        // Arrange
 //        Long userId = 1L;
 //        UserEntity user = new UserEntity();
 //        user.setId(userId);
@@ -64,17 +61,14 @@ public class AdminServiceImplTest {
 //
 //        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 //        when(roleRepository.findByName("ADMIN")).thenReturn(new Role());
-//        // Act
 //        adminService.makeAdmin(userId);
 //
-//        // Assert
 //        verify(userRepository, times(1)).findById(userId);
 //        verify(userRepository, times(1)).save(user);
 //    }
 
     @Test
     void testRemoveAdmin() {
-        // Arrange
         Long userId = 1L;
         UserEntity user = new UserEntity();
         user.setId(userId);
@@ -83,27 +77,22 @@ public class AdminServiceImplTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(roleRepository.findByName("ADMIN")).thenReturn(new Role());
 
-        // Act
         adminService.removeAdmin(userId);
 
-        // Assert
         verify(userRepository, times(1)).findById(userId);
         verify(userRepository, times(1)).save(user);
     }
 
     @Test
     void testActivateUser() {
-        // Arrange
         Long userId = 1L;
         UserEntity user = new UserEntity();
         user.setId(userId);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
-        // Act
         adminService.activateUser(userId);
 
-        // Assert
         verify(userRepository, times(1)).findById(userId);
         verify(emailService, times(1)).sendActivationEmail(user.getEmail(), user.getUsername());
         verify(userRepository, times(1)).save(user);
@@ -111,17 +100,14 @@ public class AdminServiceImplTest {
 
     @Test
     void testDeactivateUser() {
-        // Arrange
         Long userId = 1L;
         UserEntity user = new UserEntity();
         user.setId(userId);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
-        // Act
         adminService.deactivateUser(userId);
 
-        // Assert
         verify(userRepository, times(1)).findById(userId);
         verify(emailService, times(1)).sendDeactivationEmail(user.getEmail(), user.getUsername());
         verify(userRepository, times(1)).save(user);

@@ -1,4 +1,4 @@
-package com.softuni.StudentClubs.dto;
+package com.softuni.StudentClubs.models.dto;
 
 import lombok.*;
 
@@ -17,8 +17,7 @@ public class UserEditDto {
     @NotEmpty(message = "Username cannot be empty")
     private String username;
 
-    @Email(message = "Email must be valid")
-    @NotEmpty(message = "Email cannot be empty")
+    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")
     private String email;
 
     @NotEmpty(message = "Password cannot be empty")

@@ -1,23 +1,33 @@
-package com.softuni.StudentClubs.unitTests;
+package com.softuni.StudentClubs.service.impl;
 
-import com.softuni.StudentClubs.dto.EventDto;
+import com.softuni.StudentClubs.exception.NotFoundException;
+import com.softuni.StudentClubs.models.dto.EventDto;
 import com.softuni.StudentClubs.models.entities.Club;
 import com.softuni.StudentClubs.models.entities.Event;
+import com.softuni.StudentClubs.models.entities.Role;
+import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.repository.ClubRepository;
 import com.softuni.StudentClubs.repository.EventRepository;
 import com.softuni.StudentClubs.service.EmailService;
 import com.softuni.StudentClubs.service.impl.EventServiceImpl;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -59,7 +69,7 @@ public class EventServiceImplTest {
         verify(eventRepository,times(1)).save(any(Event.class));
     }
 
-    @Test
+        @Test
     void testFindAllUpcomingEvents() {
         Event event1 = new Event();
         Event event2 = new Event();
@@ -71,11 +81,10 @@ public class EventServiceImplTest {
 
         when(eventRepository.findAllUpcomingEvents()).thenReturn(events);
 
-        List<EventDto> result = eventService.findAllUpcomingEvents();
+        CollectionModel<EventDto> result = eventService.findAllUpcomingEvents();
 
-        assertEquals(events.size(), result.size());
-        assertEquals(events.get(0).getName(), result.get(0).getName());
-        assertEquals(events.get(1).getName(), result.get(1).getName());
+        assertEquals(events.size(), result.getContent().size());
+
     }
 
     @Test
@@ -93,14 +102,6 @@ public class EventServiceImplTest {
         verify(eventRepository,times(1)).save(any(Event.class));
     }
 
-    @Test
-    void testDeleteEventById() {
-        Long eventId = 1L;
-
-        eventService.deleteEventById(eventId);
-
-        verify(eventRepository,times(1)).deleteById(eventId);
-    }
 
     @Test
     void testSearchByTitle() {
@@ -175,5 +176,54 @@ public class EventServiceImplTest {
 
         assertEquals(event.getId(), result.getId());
         assertEquals(event.getName(), result.getName());
+    }
+
+    @Test
+    void testDeleteEventById() {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        Collection grantedAuthorities = Lists.newArrayList(new SimpleGrantedAuthority("ADMIN"));
+        when(authentication.getAuthorities()).thenReturn(grantedAuthorities);
+
+        long eventId = 1L;
+        Event event = new Event();
+        event.setId(eventId);
+        event.setName("Test Event");
+        Club club = new Club();
+        UserEntity createdBy = new UserEntity();
+        createdBy.setEmail("admin@example.com");
+        club.setCreatedBy(createdBy);
+        event.setClub(club);
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+
+        eventService.deleteEventById(eventId);
+
+        verify(eventRepository, times(1)).deleteById(eventId);
+        verify(emailService, times(1)).sendDeletionEmail("Event", "Test Event", "admin@example.com");
+    }
+
+    @Test
+    void testDeleteEventByIdNotFound() {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        Authentication authentication = mock(Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        Collection grantedAuthorities = Lists.newArrayList(new SimpleGrantedAuthority("ADMIN"));
+        when(authentication.getAuthorities()).thenReturn(grantedAuthorities);
+
+        long eventId = 1L;
+        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> eventService.deleteEventById(eventId));
+
+        verify(eventRepository, never()).deleteById(eventId);
+        verify(emailService, never()).sendDeletionEmail(any(), any(), any());
     }
 }

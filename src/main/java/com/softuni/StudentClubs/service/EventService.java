@@ -1,15 +1,15 @@
 package com.softuni.StudentClubs.service;
 
-import com.softuni.StudentClubs.dto.EventDto;
+import com.softuni.StudentClubs.models.dto.EventDto;
+import com.softuni.StudentClubs.models.enums.EventTypeEnum;
 import org.springframework.hateoas.CollectionModel;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface EventService {
     void createEvent(Long clubId, EventDto eventDto);
 
-    List<EventDto> findAllUpcomingEvents();
+    CollectionModel<EventDto> findAllUpcomingEvents();
 
     EventDto findEventById(long eventId);
 

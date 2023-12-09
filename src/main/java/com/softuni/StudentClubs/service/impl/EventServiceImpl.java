@@ -1,17 +1,20 @@
 package com.softuni.StudentClubs.service.impl;
 
-import com.softuni.StudentClubs.dto.EventDto;
+import com.softuni.StudentClubs.controller.EventController;
+import com.softuni.StudentClubs.models.dto.EventDto;
 import com.softuni.StudentClubs.mapper.EventMapper;
 import com.softuni.StudentClubs.models.entities.Club;
 import com.softuni.StudentClubs.models.entities.Event;
+import com.softuni.StudentClubs.models.enums.EventTypeEnum;
 import com.softuni.StudentClubs.repository.ClubRepository;
 import com.softuni.StudentClubs.repository.EventRepository;
-import com.softuni.StudentClubs.repository.UserRepository;
 import com.softuni.StudentClubs.service.EmailService;
 import com.softuni.StudentClubs.service.EventService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -47,9 +50,19 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDto> findAllUpcomingEvents() {
+    public CollectionModel<EventDto> findAllUpcomingEvents() {
         List<Event> events = eventRepository.findAllUpcomingEvents();
-        return events.stream().map(EventMapper::mapToEventDto).collect(Collectors.toList());
+        List<EventDto> eventDtos = events.stream().map(EventMapper::mapToEventDto).collect(Collectors.toList());
+
+        for (EventDto eventDto : eventDtos) {
+            Link selfLink = WebMvcLinkBuilder.linkTo(EventController.class).slash(eventDto.getId()).withSelfRel();
+            eventDto.add(selfLink);
+        }
+
+        Link collectionLink = WebMvcLinkBuilder.linkTo(EventController.class).withSelfRel();
+        CollectionModel<EventDto> eventDtoCollectionModel = CollectionModel.of(eventDtos, collectionLink);
+
+        return eventDtoCollectionModel;
     }
 
     @Override
@@ -64,9 +77,25 @@ public class EventServiceImpl implements EventService {
         eventRepository.save(event);
     }
 
-    @Override
     public void deleteEventById(long eventId) {
-        eventRepository.deleteById(eventId);
+        try {
+            Event event = eventRepository.findById(eventId)
+                    .orElseThrow(() -> new EntityNotFoundException("Event with id " + eventId + " not found!"));
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String nameEvent = event.getName();
+            String email = event.getClub().getCreatedBy().getEmail();
+            eventRepository.deleteById(eventId);
+
+            if (authentication.getAuthorities().stream().anyMatch(
+                    grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"))) {
+                emailService.sendDeletionEmail("Event", nameEvent, email);
+            }
+        } catch (EntityNotFoundException ex) {
+            // Log the exception or handle it as needed
+            // You might want to rethrow a custom exception if necessary
+            throw new com.softuni.StudentClubs.exception.NotFoundException(eventId);
+        }
     }
 
     @Override
@@ -92,9 +121,11 @@ public class EventServiceImpl implements EventService {
 
             emailService.sendEmailWithAttachment(email, subject, body, calendarAttachment, event.getName() + ".ics");
         } catch (Exception e) {
-            throw new RuntimeException("Error sending calendar invitation", e);
+            // Catch any other unexpected exceptions
+            throw new RuntimeException("Unexpected error sending calendar invitation", e);
         }
     }
+
 
 
     private String generateInvitationEmailContent(Event event) {

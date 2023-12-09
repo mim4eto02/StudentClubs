@@ -1,6 +1,6 @@
 package com.softuni.StudentClubs.service.impl;
 
-import com.softuni.StudentClubs.dto.ContactDto;
+import com.softuni.StudentClubs.models.dto.ContactDto;
 import com.softuni.StudentClubs.mapper.ContactMapper;
 import com.softuni.StudentClubs.models.entities.Contact;
 import com.softuni.StudentClubs.repository.ContactRepository;

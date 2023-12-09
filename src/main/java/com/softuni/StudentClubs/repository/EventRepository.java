@@ -1,6 +1,8 @@
 package com.softuni.StudentClubs.repository;
 
+import com.softuni.StudentClubs.models.entities.Club;
 import com.softuni.StudentClubs.models.entities.Event;
+import com.softuni.StudentClubs.models.enums.EventTypeEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

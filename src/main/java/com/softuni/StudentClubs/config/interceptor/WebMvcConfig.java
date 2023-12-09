@@ -1,4 +1,4 @@
-package com.softuni.StudentClubs.config;
+package com.softuni.StudentClubs.config.interceptor;
 
 import com.softuni.StudentClubs.interceptors.AuthenticationInterceptor;
 import org.springframework.context.annotation.Bean;

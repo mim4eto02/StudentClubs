@@ -1,0 +1,44 @@
+<html
+        xmlns:th="http://thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <title>Club Detail</title>
+</head>
+<body class="d-flex flex-column">
+
+<section layout:fragment="body">
+    <section class="align-self-center">
+        <div class="container px-5 my-5 ">
+            <div class="row gx-5">
+
+                <section class="col-lg-9 ">
+                    <!-- Post content-->
+                    <article>
+                        <!-- Post header-->
+                        <header class="mb-4">
+                            <!-- Post title-->
+                            <h1 class="fw-bolder mb-1 align-self-center" th:text="${article.title}">Welcome to Blog Post!</h1>
+                            <!-- Post meta content-->
+<!--                            <div class="text-muted fst-italic mb-2" th:text="${article?.author?}">January 1, 2023</div>-->
+                            <!-- Post categories-->
+                        </header>
+                        <!-- Preview image figure-->
+                        <figure class="mb-4"><img class="img-fluid rounded align-self-center" th:src="${article.photoUrl}" alt="..." /></figure>
+                        <!-- Post content-->
+                        <section class="mb-5">
+                            <p class="fs-5 mb-4"  th:text="${article.content}">Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.</p>
+                        </section>
+                    </article>
+                    <div th:if="${user != null and user.id == article.author.id or #authorization.expression('hasAuthority(''ADMIN'')')}">
+                        <a class="btn btn-primary m-lg-1" th:href="@{/articles/{articleId}/delete(articleId=${article.id})}">Delete</a>
+                    </div>
+                </section>
+
+                </div>
+            </div>
+
+            </section>
+</section>
+</body>
+</html>

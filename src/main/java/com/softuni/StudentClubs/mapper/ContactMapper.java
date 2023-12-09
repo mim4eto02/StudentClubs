@@ -1,6 +1,6 @@
 package com.softuni.StudentClubs.mapper;
 
-import com.softuni.StudentClubs.dto.ContactDto;
+import com.softuni.StudentClubs.models.dto.ContactDto;
 import com.softuni.StudentClubs.models.entities.Contact;
 import org.modelmapper.ModelMapper;
 

@@ -1,12 +1,13 @@
-package com.softuni.StudentClubs.unitTests;
+package com.softuni.StudentClubs.service.impl;
 
-import com.softuni.StudentClubs.dto.ClubDto;
+import com.softuni.StudentClubs.models.dto.ClubDto;
 import com.softuni.StudentClubs.models.entities.Club;
 import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.repository.ClubRepository;
 import com.softuni.StudentClubs.repository.UserRepository;
 import com.softuni.StudentClubs.security.SecurityUtil;
 import com.softuni.StudentClubs.service.impl.ClubServiceImpl;
+import com.softuni.StudentClubs.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -77,14 +79,12 @@ public class ClubServiceImplTest {
 
     @Test
     void testSaveClub() {
-        // Mock data
         ClubDto clubDto = new ClubDto();
         clubDto.setTitle("Test Club");
 
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername("testUser");
 
-        // Mock security context
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn("testUser");
 
@@ -93,26 +93,15 @@ public class ClubServiceImplTest {
 
         SecurityContextHolder.setContext(securityContext);
 
-        // Mock behavior
         when(userRepository.findByUsername(anyString())).thenReturn(userEntity);
         when(clubRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Test
         Club result = clubService.saveClub(clubDto);
 
-        // Verify
         assertEquals(userEntity, result.getCreatedBy());
         verify(clubRepository, times(1)).save(any());
 
-        // Reset security context
         SecurityContextHolder.clearContext();
-    }
-
-    @Test
-    void testDeleteClubById() {
-        clubService.deleteClubById(1L);
-
-        verify(clubRepository, times(1)).deleteById(1L);
     }
 
     @Test
@@ -143,7 +132,6 @@ public class ClubServiceImplTest {
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername("testUser");
 
-        // Mock security context
         Authentication authentication = mock(Authentication.class);
         when(authentication.getName()).thenReturn("testUser");
 
@@ -152,17 +140,13 @@ public class ClubServiceImplTest {
 
         SecurityContextHolder.setContext(securityContext);
 
-        // Mock behavior
         when(userRepository.findByUsername(anyString())).thenReturn(userEntity);
         when(clubRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Test
         clubService.updateClub(clubDto);
 
-        // Verify
         verify(clubRepository, times(1)).save(any());
 
-        // Reset security context
         SecurityContextHolder.clearContext();
     }
 
@@ -184,4 +168,15 @@ public class ClubServiceImplTest {
 
         assertEquals(2, result.size());
     }
+
+
+    @Test
+    void testDeleteClubById() {
+        assertThrows(NotFoundException.class, () -> {
+            clubService.deleteClubById(1L);
+        });
+
+        verify(clubRepository, never()).deleteById(1L);
+    }
+
 }

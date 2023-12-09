@@ -95,7 +95,8 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <ul class="list-unstyled mb-0">
-                                    <li><a href="#!">Category 1</a></li>
+
+                                    <li><a th:href="@{/events/{clubId}/type/{eventType}(clubId=${club.id}, eventType='Academic'}">Category 1</a></li>
                                     <li><a href="#!">Category 2</a></li>
                                     <li><a href="#!">Category 3</a></li>
                                 </ul>

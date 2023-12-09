@@ -1,4 +1,4 @@
-package com.softuni.StudentClubs.dto;
+package com.softuni.StudentClubs.models.dto;
 
 import lombok.*;
 
@@ -16,8 +16,7 @@ public class ContactDto {
     @NotBlank(message = "Name must not be empty!")
    private String name;
 
-    @NotBlank(message = "Email must not be empty!")
-    @Email(message = "Invalid email!")
+    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")
    private String email;
 
     @NotBlank(message = "Subject must not be empty!")

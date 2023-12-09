@@ -1,12 +1,13 @@
 package com.softuni.StudentClubs.controller;
 
-import com.softuni.StudentClubs.dto.EventDto;
+import com.softuni.StudentClubs.models.dto.EventDto;
 import com.softuni.StudentClubs.models.entities.Event;
 import com.softuni.StudentClubs.models.entities.UserEntity;
+import com.softuni.StudentClubs.models.enums.EventTypeEnum;
 import com.softuni.StudentClubs.security.SecurityUtil;
-import com.softuni.StudentClubs.service.ClubService;
 import com.softuni.StudentClubs.service.EventService;
 import com.softuni.StudentClubs.service.UserService;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,13 +32,15 @@ public class EventController {
     @GetMapping("/events")
     public String eventsList(Model model) {
         UserEntity user = new UserEntity();
-        List<EventDto> events = eventService.findAllUpcomingEvents();
+        CollectionModel<EventDto> events = eventService.findAllUpcomingEvents();
+
         String username = SecurityUtil.getSessionUser();
         if (username != null) {
             user = userService.findByUsername(username);
             model.addAttribute("user", user);
         }
         model.addAttribute("user", user);
+
         model.addAttribute("events", events);
         return "events-list";
     }

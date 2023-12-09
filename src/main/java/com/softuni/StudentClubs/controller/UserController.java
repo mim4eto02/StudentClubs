@@ -1,6 +1,6 @@
 package com.softuni.StudentClubs.controller;
 
-import com.softuni.StudentClubs.dto.UserEditDto;
+import com.softuni.StudentClubs.models.dto.UserEditDto;
 import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.security.SecurityUtil;
 import com.softuni.StudentClubs.service.UserService;
@@ -55,5 +55,4 @@ public class UserController {
     public String showUsers() {
         return "users";
     }
-
 }

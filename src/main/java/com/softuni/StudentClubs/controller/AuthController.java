@@ -1,6 +1,6 @@
 package com.softuni.StudentClubs.controller;
 
-import com.softuni.StudentClubs.dto.RegistrationDto;
+import com.softuni.StudentClubs.models.dto.RegistrationDto;
 import com.softuni.StudentClubs.models.entities.UserEntity;
 import com.softuni.StudentClubs.service.UserService;
 import org.springframework.stereotype.Controller;

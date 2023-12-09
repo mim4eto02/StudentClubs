@@ -1,6 +1,6 @@
 package com.softuni.StudentClubs.controller.rest;
 
-import com.softuni.StudentClubs.dto.UserViewDto;
+import com.softuni.StudentClubs.models.dto.UserViewDto;
 import com.softuni.StudentClubs.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
