@@ -50,12 +50,14 @@ public class EventController {
         UserEntity user = new UserEntity();
         EventDto event = eventService.findEventById(eventId);
         String username = SecurityUtil.getSessionUser();
+        boolean isPastEvent = event.getEndTime().isBefore(java.time.LocalDateTime.now());
         if (username != null) {
             user = userService.findByUsername(username);
             model.addAttribute("user", user);
         }
         model.addAttribute("user", user);
         model.addAttribute("event", event);
+        model.addAttribute("isPastEvent", isPastEvent);
         return "events-detail";
     }
 

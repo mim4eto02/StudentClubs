@@ -1,70 +1,120 @@
 package com.softuni.StudentClubs.controller;
-
 import com.softuni.StudentClubs.models.dto.ArticleDto;
+import com.softuni.StudentClubs.models.entities.UserEntity;
+import com.softuni.StudentClubs.security.SecurityUtil;
 import com.softuni.StudentClubs.service.ArticleService;
 import com.softuni.StudentClubs.service.UserService;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ArticleController.class)
-@RunWith(SpringRunner.class)
-public class ArticleControllerTest {
+class ArticleControllerTest {
 
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private ArticleService articleService;
 
-    @MockBean
+    @Mock
     private UserService userService;
 
     @InjectMocks
     private ArticleController articleController;
 
+    private MockMvc mockMvc;
+
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(articleController).build();
     }
 
-//    @Test
-//    public void listArticles_ShouldReturnArticlesListPage() throws Exception {
-//        List<ArticleDto> articles = new ArrayList<>();
-//        when(articleService.findAllArticles()).thenReturn(articles);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.get("/articles"))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.view().name("articles-list"))
-//                .andExpect(MockMvcResultMatchers.model().attribute("articles", articles));
-//    }
-//
-//
-//
-//    @Test
-//    public void createArticle_ShouldSaveArticleAndRedirectToListPage() throws Exception {
-//        ArticleDto articleDto = new ArticleDto();
-//        articleDto.setTitle("Test Article");
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/articles/new")
-//                        .flashAttr("article", articleDto))
-//                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-//                .andExpect(MockMvcResultMatchers.redirectedUrl("/articles"));
-//
-//        verify(articleService, times(1)).saveArticle(articleDto);
-//    }
+    @Test
+    void listArticles() throws Exception {
+        when(userService.findByUsername(anyString())).thenReturn(new UserEntity());
+        when(articleService.findAllArticles()).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/articles"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("articles-list"))
+                .andExpect(model().attributeExists("articles"))
+                .andExpect(model().attributeExists("user"));
+
+        verify(userService, times(1)).findByUsername(anyString());
+        verify(articleService, times(1)).findAllArticles();
+    }
+
+    @Test
+    void createArticleForm() throws Exception {
+        mockMvc.perform(get("/articles/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("articles-create"))
+                .andExpect(model().attributeExists("article"));
+
+    }
+
+    @Test
+    void editArticleForm() throws Exception {
+        long articleId = 1L;
+        when(userService.findByUsername(anyString())).thenReturn(new UserEntity());
+        when(articleService.findArticleById(articleId)).thenReturn(new ArticleDto());
+
+        mockMvc.perform(get("/articles/{articleId}/edit", articleId))
+                .andExpect(status().isOk())
+                .andExpect(view().name("articles-edit"))
+                .andExpect(model().attributeExists("article"))
+                .andExpect(model().attributeExists("user"));
+
+        verify(userService, times(1)).findByUsername(anyString());
+        verify(articleService, times(1)).findArticleById(articleId);
+    }
+
+    @Test
+    void deleteArticle() throws Exception {
+        long articleId = 1L;
+
+        mockMvc.perform(get("/articles/{articleId}/delete", articleId))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/articles"));
+
+        verify(articleService, times(1)).deleteArticle(articleId);
+    }
+
+    @Test
+    void searchArticles() throws Exception {
+        when(articleService.searchByTitle(anyString())).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/articles/search").param("query", "article"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("articles-list"))
+                .andExpect(model().attributeExists("articles"));
+
+        verify(articleService, times(1)).searchByTitle("article");
+    }
+
+    @Test
+    void articleDetail() throws Exception {
+        long articleId = 1L;
+        when(userService.findByUsername(anyString())).thenReturn(new UserEntity());
+        when(articleService.findArticleById(articleId)).thenReturn(new ArticleDto());
+
+        mockMvc.perform(get("/articles/{articleId}", articleId))
+                .andExpect(status().isOk())
+                .andExpect(view().name("articles-detail"))
+                .andExpect(model().attributeExists("article"))
+                .andExpect(model().attributeExists("user"));
+
+        verify(userService, times(1)).findByUsername(anyString());
+        verify(articleService, times(1)).findArticleById(articleId);
+    }
+
 }

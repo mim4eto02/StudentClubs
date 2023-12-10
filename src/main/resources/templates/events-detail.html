@@ -34,8 +34,8 @@
 <!--                    <a class="btn btn-primary m-lg-1" th:href="@{/events/{eventId}/invite(eventId=${event.id})}">Join</a>-->
 <!--                </div>-->
 
-                <form sec:authorize="isAuthenticated()" th:action="@{/events/{eventId}/invite(eventId=${event.id})}" method="post">
-                    <button class="btn btn-primary m-lg-1 border-1" type="submit">Send me information</button>
+                <form th:if="${!isPastEvent}" sec:authorize="isAuthenticated()" th:action="@{/events/{eventId}/invite(eventId=${event.id})}" method="post">
+                    <button class="btn btn-primary m-lg-1 border-1"  type="submit">Send me information</button>
                 </form>
 
 
