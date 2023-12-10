@@ -82,7 +82,7 @@
                         </div>
                     </div>
 
-                    <div class="item">
+                    <div sec:authorize="isAuthenticated()" class="item">
                         <div class="icon">
                             <img src="assets/images/service-icon-02.png" alt="">
                         </div>
@@ -92,7 +92,7 @@
                         </div>
                     </div>
 
-                    <div class="item">
+                    <div class="item" sec:authorize="isAuthenticated()">
                         <div class="icon">
                             <img src="assets/images/service-icon-01.png" alt="">
                         </div>
@@ -111,17 +111,6 @@
 
                         </div>
                     </div>
-
-<!--                    <div class="item">-->
-<!--                        <div class="icon">-->
-<!--                            <img src="assets/images/service-icon-03.png" alt="">-->
-<!--                        </div>-->
-<!--                        <div class="down-content">-->
-<!--                            <h4>Best Networking</h4>-->
-<!--                            <p>Suspendisse tempor mauris a sem elementum bibendum. Praesent facilisis massa non vestibulum.</p>-->
-<!--                        </div>-->
-<!--                    </div>-->
-
                 </div>
             </div>
         </div>

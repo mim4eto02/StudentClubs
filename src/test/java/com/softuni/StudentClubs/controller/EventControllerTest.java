@@ -49,6 +49,7 @@ class EventControllerTest {
                 .andExpect(model().attributeExists("events"))
                 .andExpect(model().attributeExists("user"));
 
+
         verify(eventService, times(1)).findAllUpcomingEvents();
         verify(userService, times(1)).findByUsername(anyString());
     }

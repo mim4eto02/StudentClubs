@@ -5,7 +5,6 @@ import com.softuni.StudentClubs.models.dto.EventDto;
 import com.softuni.StudentClubs.mapper.EventMapper;
 import com.softuni.StudentClubs.models.entities.Club;
 import com.softuni.StudentClubs.models.entities.Event;
-import com.softuni.StudentClubs.models.enums.EventTypeEnum;
 import com.softuni.StudentClubs.repository.ClubRepository;
 import com.softuni.StudentClubs.repository.EventRepository;
 import com.softuni.StudentClubs.service.EmailService;

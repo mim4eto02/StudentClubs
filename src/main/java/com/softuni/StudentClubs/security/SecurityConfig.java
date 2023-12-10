@@ -31,10 +31,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/register", "/login", "/clubs", "/events", "/css/**", "/js?**", "/img/**", "/fonts/**", "/favicon.ico", "/contact", "/about", "/privacy", "/terms", "/", "articles")
+                .antMatchers("/login", "/register").anonymous()
+                .antMatchers( "/clubs",  "/css/**", "/js?**", "/img/**", "/fonts/**", "/favicon.ico", "/contact", "/about", "/privacy", "/terms", "/", "articles")
                 .permitAll()
 //                .antMatchers("/admin/**")
 //                .hasAuthority("ADMIN")
+
                 .antMatchers("/clubs/new", "/clubs/edit/**", "/clubs/delete/**", "/clubs/join/**", "/clubs/leave/**")
                 .hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/articles/new", "/articles/edit/**", "/articles/delete/**")
@@ -47,7 +49,7 @@ public class SecurityConfig {
                 .and()
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/clubs")
+                        .defaultSuccessUrl("/")
                         .loginProcessingUrl("/login")
                         .failureUrl("/login?error=true")
                         .permitAll()
