@@ -15,12 +15,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return new AuthenticationInterceptor();
     }
 
-    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor())
                 .addPathPatterns("/admin/**")  // Apply the interceptor to URLs starting with "/admin"
-                .addPathPatterns("/users/**");// Apply the interceptor to URLs starting with "/user"
-//                .addPathPatterns("/register")
-//                .addPathPatterns("/login");  // Exclude the login page from the interceptor
+                .addPathPatterns("/users/**")  // Apply the interceptor to URLs starting with "/user"
+                .excludePathPatterns("/login")  // Exclude the login page from the interceptor
+                .addPathPatterns("/users/**");
     }
 }

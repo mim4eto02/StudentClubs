@@ -2,6 +2,7 @@ package com.softuni.StudentClubs.controller;
 
 import com.softuni.StudentClubs.models.dto.RegistrationDto;
 import com.softuni.StudentClubs.models.entities.UserEntity;
+import com.softuni.StudentClubs.security.SecurityUtil;
 import com.softuni.StudentClubs.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,12 +23,20 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginPage(){
+        String username = SecurityUtil.getSessionUser();
+        if(!username.equals("anonymousUser")) {
+            return "redirect:/";
+        }
         return "login";
     }
 
     @GetMapping("/register")
     public String getRegisterForm(Model model) {
         RegistrationDto user = new RegistrationDto();
+        String username = SecurityUtil.getSessionUser();
+        if(!username.equals("anonymousUser")) {
+            return "redirect:/";
+        }
         model.addAttribute("user", user);
         return "register";
     }
